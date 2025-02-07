@@ -1,0 +1,12 @@
+---
+- hosts: postfix
+  become: yes
+  roles:
+  - ldap
+  vars_prompt:
+  - name: postfix_hostname
+    prompt: Postfixサーバのホスト名
+    private: no
+  - name: postfix_domain
+    prompt: Postfixのドメイン
+    private: no

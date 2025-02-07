@@ -1,0 +1,14 @@
+---
+- hosts: ldap
+  become: yes
+  roles:
+  - ldap
+  vars_prompt:
+  - name: ldap_password
+    prompt: 設定するLDAPサーバのパスワードは何にしますか？
+  - name: ldap_domain
+    prompt: LDAPサーバのドメインはなんですか？(ex. example.com)
+    private: no
+  - name: ldap_base_dn
+    prompt: LDAPサーバでDNを設定してください。(ex. example.comの場合は、dc=example,dc=com)
+    private: no

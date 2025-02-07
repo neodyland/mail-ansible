@@ -1,0 +1,9 @@
+---
+- name: Install postfix
+  ansible.builtin.apt:
+    name: postfix
+
+- name: Set Postfix config
+  ansible.builtin.template:
+    src: postfix.main.cf
+    dest: /etc/postfix/main.cf

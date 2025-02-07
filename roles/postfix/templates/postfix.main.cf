@@ -1,0 +1,5 @@
+myhostname = {{ postfix_hostname }}
+mydomain = {{ postfix_domain }}
+myorigin = $mydomain
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+mynetworks = 0.0.0.0/0

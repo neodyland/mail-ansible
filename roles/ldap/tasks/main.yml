@@ -1,0 +1,43 @@
+---
+- name: Install dependencies (1)
+  ansible.builtin.apt:
+    name:
+    - debconf-utils
+    update_cache: true
+
+- name: Reconfigure slapd
+  ansible.builtin.debconf:
+    name: slapd
+    question: "{{ item.name }}"
+    value: "{{ item.value }}"
+    vtype: "{{ item.vtype }}"
+  loop:
+  - name: slapd/password1
+    value: "{{ ldap_password }}"
+    vtype: password
+  - name: slapd/password2
+    value: "{{ ldap_password }}"
+    vtype: password
+  - name: slapd/domain
+    value: "{{ ldap_domain }}"
+    vtype: string
+  - name: slapd/no_configuration
+    value: false
+    vtype: boolean
+
+- name: Install dependencies (2)
+  ansible.builtin.apt:
+    name:
+    - slapd
+    - ldap-utils
+    update_cache: true
+
+- name: Add origanization and user to LDAP Server
+  ansible.builtin.template:
+    src: add_org.ldif.j2
+    dest: /tmp/add_org.ldif
+  register: add_org_ldif
+
+- name: Apply
+  ansible.builtin.shell: ldapadd -x -D cn=admin,{{ ldap_base_dn }} -w {{ ldap_password }} -f /tmp/add_org.ldif
+  when: add_org_ldif.changed
