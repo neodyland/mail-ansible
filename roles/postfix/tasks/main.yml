@@ -1,7 +1,9 @@
 ---
 - name: Install postfix
   ansible.builtin.apt:
-    name: postfix
+    name:
+    - postfix
+    - postfix-ldap
 
 - name: Set Postfix config
   ansible.builtin.template:
